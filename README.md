@@ -1,10 +1,14 @@
 # NGINX Build Script
 
-This is an NGINX build script which compiles NGINX with a custom version of OpenSSL. It should work on other Debian-based Linux distros. 
+This is an NGINX build script which compiles NGINX with a custom version of OpenSSL. It should work on other Debian-based Linux distros.
 
-The benefit of building from source is you can customize the modules to your needs and always use the latest versions of NGINX and OpenSSL. 
+The benefit of building from source is you can customize the modules to your needs and always use the latest versions of NGINX and OpenSSL.
 
 Compiling will take time, especially on a Raspberry Pi, so be patient.
+
+### Additional modules for Nginx:
+
+* [MaxMind GeoIP2 module](https://github.com/leev/ngx_http_geoip2_module)
 
 ## Usage
 
@@ -32,7 +36,7 @@ Compiling will take time, especially on a Raspberry Pi, so be patient.
 ## Issues
 
 If you have any problems with or questions about this image, please contact me
-through a [GitHub issue](https://github.com/MatthewVance/nginx-build/issues).
+through a [GitHub issue](https://github.com/zhukovra/nginx-build/issues).
 
 ## Contributing
 
@@ -44,5 +48,4 @@ The script was originally based on the [build_nginx.sh](https://gist.github.com/
 
 ## License
 
-Unless otherwise specified, all code is released under the MIT License (MIT). See the [repository's `LICENSE` file](https://github.com/MatthewVance/nginx-build/blob/master/LICENSE) for details.
-
+Unless otherwise specified, all code is released under the MIT License (MIT). See the [repository's `LICENSE` file](https://github.com/zhukovra/nginx-build/blob/master/LICENSE) for details.

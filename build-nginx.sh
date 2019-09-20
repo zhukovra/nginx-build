@@ -18,6 +18,12 @@ source_zlib=https://zlib.net/
 source_openssl=https://www.openssl.org/source/
 source_nginx=https://nginx.org/download/
 
+version_libmaxminddb=1.3.2
+source_libmaxminddb="https://github.com/maxmind/libmaxminddb/releases/download/${version_libmaxminddb}/libmaxminddb-${version_libmaxminddb}.tar.gz"
+
+version_ngx_http_geoip2_module=3.2
+source_ngx_http_geoip2_module="https://github.com/leev/ngx_http_geoip2_module/archive/${version_ngx_http_geoip2_module}.tar.gz"
+
 # Look up latest versions of each package
 version_pcre=$(curl -sL ${source_pcre} | grep -Eo 'pcre\-[0-9.]+[0-9]' | sort -V | tail -n 1)
 version_zlib=$(curl -sL ${source_zlib} | grep -Eo 'zlib\-[0-9.]+[0-9]' | sort -V | tail -n 1)
@@ -55,6 +61,8 @@ curl -L "${source_pcre}${version_pcre}.tar.gz" -o "${bpath}/pcre.tar.gz"
 curl -L "${source_zlib}${version_zlib}.tar.gz" -o "${bpath}/zlib.tar.gz"
 curl -L "${source_openssl}${version_openssl}.tar.gz" -o "${bpath}/openssl.tar.gz"
 curl -L "${source_nginx}${version_nginx}.tar.gz" -o "${bpath}/nginx.tar.gz"
+curl -L "${source_libmaxminddb}" -o "${bpath}/libmaxminddb.tar.gz"
+curl -L "${source_ngx_http_geoip2_module}" -o "${bpath}/ngx_http_geoip2_module.tar.gz"
 
 # Download the signature files
 curl -L "${source_pcre}${version_pcre}.tar.gz.sig" -o "${bpath}/pcre.tar.gz.sig"
@@ -83,6 +91,14 @@ done
 rm -rf \
   "$GNUPGHOME" \
   "$bpath"/*.tar.*
+
+# Build libmaxminddb
+cd "$bpath/libmaxminddb-${version_libmaxminddb}"
+./configure
+make
+make check
+make install
+ldconfig
 
 # Rename the existing /etc/nginx directory so it's saved as a back-up
 if [ -d "/etc/nginx" ]; then
@@ -157,7 +173,8 @@ cd "$bpath/$version_nginx"
   --without-http_ssi_module \
   --without-mail_imap_module \
   --without-mail_pop3_module \
-  --without-mail_smtp_module
+  --without-mail_smtp_module \
+  --add-module="$bpath/ngx_http_geoip2_module-$version_ngx_http_geoip2_module"
 make
 make install
 make clean
